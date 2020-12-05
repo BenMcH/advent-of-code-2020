@@ -2,39 +2,22 @@ boarding_passes = File.read('./data.txt').split.map do |pass|
     [pass[0..6], pass[7..-1]]
 end
 
-def get_row(pass)
-    rows = (0..127).to_a
+def get_pos(max, instructions, upper_char)
+    ids = (0..max).to_a
 
-    pass[0].chars.each do |fb|
-        if fb == 'F'
-            rows = rows.each_slice(rows.length / 2).to_a[0]
-        else
-            rows = rows.each_slice(rows.length / 2).to_a[1]
-        end
+    instructions.chars.each do |upper_lower|
+        upper_half, lower_half = ids.each_slice(ids.length / 2).to_a
+        ids = upper_lower == upper_char ? upper_half : lower_half
     end
 
-    rows[0]
-end
-
-def get_col(pass)
-    cols = (0..7).to_a
-
-    pass[1].chars.each do |lr|
-        if lr == 'L'
-            cols = cols.each_slice(cols.length / 2).to_a[0]
-        else
-            cols = cols.each_slice(cols.length / 2).to_a[1]
-        end
-    end
-
-    cols[0]
+    ids[0]
 end
 
 def get_seat_id(row, col)
     row * 8 + col
 end
 
-all_seat_ids = boarding_passes.map{|pass| get_seat_id(get_row(pass), get_col(pass))}
+all_seat_ids = boarding_passes.map{|pass| get_seat_id(get_pos(127, pass[0], 'F'), get_pos(7, pass[1], 'L'))}
 max_seat_id = all_seat_ids.max
 puts max_seat_id
 
