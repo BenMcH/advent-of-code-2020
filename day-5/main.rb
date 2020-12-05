@@ -30,8 +30,15 @@ def get_col(pass)
     cols[0]
 end
 
-def get_seat_id(pass)
-    get_row(pass) * 8 + get_col(pass)
+def get_seat_id(row, col)
+    row * 8 + col
 end
 
-puts boarding_passes.map{|pass| get_seat_id(pass)}.max
+all_seat_ids = boarding_passes.map{|pass| get_seat_id(get_row(pass), get_col(pass))}
+max_seat_id = all_seat_ids.max
+puts max_seat_id
+
+missing_seat = max_seat_id
+missing_seat = missing_seat - 1 while all_seat_ids.include?(missing_seat)
+
+puts missing_seat
