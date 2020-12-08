@@ -1,21 +1,39 @@
-instructions = File.read('data.txt').split("\n").map(&:split).map{|instruction| [instruction[0], instruction[1].to_i]}
+instructions = File.read('data.txt').split("\n").map(&:split).map{|instruction| [instruction[0].to_sym, instruction[1].to_i]}
 
-run_instructions = []
-acc = 0
-program_counter = 0
 
-while !run_instructions.include?(program_counter)
-    instruction, argument = instructions[program_counter]
+def execute(program)
+    run_instructions = []
+    acc = 0
+    program_counter = 0
 
-    case instruction
-    when 'acc'
-        acc += argument
-    when 'jmp'
-        program_counter += (argument - 1)
+    while program_counter < program.length && !run_instructions.include?(program_counter)
+        instruction, argument = program[program_counter]
+        run_instructions << program_counter
+
+        case instruction
+        when :acc
+            acc += argument
+        when :jmp
+            program_counter += argument
+            next
+        end
+
+        program_counter += 1
     end
 
-    run_instructions << program_counter
-    program_counter += 1
+    [acc, program_counter]
 end
 
-puts acc
+puts execute(instructions)[0]
+
+instructions.each.with_index do |line, index|
+    instruction, arg = line
+    next unless [:jmp, :nop].include?(instruction)
+
+    instructions[index][0] = instruction == :jmp ? :nop : :jmp
+    acc, program_counter = execute(instructions)
+    if (program_counter >= instructions.length)
+        puts acc
+    end
+    instructions[index][0] = instruction
+end
