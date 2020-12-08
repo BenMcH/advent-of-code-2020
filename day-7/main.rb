@@ -16,3 +16,25 @@ end
 
 puts recursive_find(rules, 'shiny gold').length
 
+mapped_rules = {}
+rules.each do |rule|
+    key, *values = rule
+
+    mapped_rules[key] = values.map{|value| [value[0].to_i, value[2..-1]]}
+end
+
+def recursive_count(rules, name = 'shiny gold')
+    rule = rules[name]
+
+    rule.map do |individual_rule|
+        count, set = individual_rule
+
+        if !rules[set]
+            count
+        else
+            count + count * recursive_count(rules, set)
+        end
+    end.reduce(&:+)
+end
+
+puts recursive_count(mapped_rules)
