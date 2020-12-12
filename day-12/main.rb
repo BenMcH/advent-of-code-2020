@@ -10,28 +10,15 @@ direction = [1, 0]
 
 directions.each do |d|
     instruction, amount = d
-    turns = amount / 90
 
-    if instruction == :f
-        pos = [pos[0] + direction[0] * amount, pos[1] + direction[1] * amount]
-    end
-    if instruction == :n
-        pos[1] += amount
-    end
-    if instruction == :s
-        pos[1] -= amount
-    end
-    if instruction == :e
-        pos[0] += amount
-    end
-    if instruction == :w
-        pos[0] -= amount
-    end
-    if instruction == :l
-        turns.times do direction = direction == E ? N : direction == N ? W : direction == W ? S : E end
-    end
-    if instruction == :r
-        turns.times do direction = direction == E ? S : direction == S ? W : direction == W ? N : E end
+    case instruction
+        when :f then pos = [pos[0] + direction[0] * amount, pos[1] + direction[1] * amount]
+        when :n then pos[1] += amount
+        when :s then pos[1] -= amount
+        when :e then pos[0] += amount
+        when :w then pos[0] -= amount
+        when :l then (amount / 90).times do direction = direction == E ? N : direction == N ? W : direction == W ? S : E end
+        when :r then (amount / 90).times do direction = direction == E ? S : direction == S ? W : direction == W ? N : E end
     end
 end
 
