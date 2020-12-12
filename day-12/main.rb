@@ -23,3 +23,28 @@ directions.each do |d|
 end
 
 p pos.map(&:abs).sum
+
+pos = [0, 0]
+direction = [1, 0]
+waypoint = [10, 1]
+
+def move_waypoint(waypoint, deg)
+    (deg / 90).times do waypoint = [-waypoint[1], waypoint[0]] end
+    waypoint
+end
+
+directions.each do |d|
+    instruction, amount = d
+
+    case instruction
+        when :f then pos = [pos[0] + waypoint[0] * amount, pos[1] + waypoint[1] * amount]
+        when :n then waypoint[1] += amount
+        when :s then waypoint[1] -= amount
+        when :e then waypoint[0] += amount
+        when :w then waypoint[0] -= amount
+        when :l then waypoint = move_waypoint(waypoint, amount)
+        when :r then waypoint = move_waypoint(waypoint, 360 - amount)
+    end
+end
+
+p pos.map(&:abs).sum
