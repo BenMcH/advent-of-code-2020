@@ -1,4 +1,4 @@
-problems = File.read('./data.txt').split("\n").map{|problem| problem.gsub(' ', '')}
+problems = File.read('./data.txt').split("\n")
 
 class Integer
     def -(operator)
