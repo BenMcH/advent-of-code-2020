@@ -20,3 +20,11 @@ regex = "^#{build_regex(rule_book)}$"
 regex =  Regexp.new(regex)
 
 p messages.count{|m| regex.match? m }
+
+rule_book[8] = [[42, '+']]
+rule_book[11] = (1..10).map {|i| [42] * i + [31] * i} # It _probably_ won't be hit more than 10 iterations
+
+regex = "^#{build_regex(rule_book)}$"
+regex =  Regexp.new(regex)
+
+p messages.count{|m| regex.match? m }
