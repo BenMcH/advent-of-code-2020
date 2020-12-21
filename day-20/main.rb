@@ -1,27 +1,28 @@
 data = File.read('./data.txt').split("\n\n")
 
-tiles = {}
+tiles = []
+
+Tile = Struct.new :id, :edges, :tile_rows
 tile_edges = {}
 data.each do |t|
     name, *tt = t.split("\n")
 
     key = name[5..-2].to_i
-    tiles[key] = tt
-    tile_edges[key] = [
+    edges = [
         tt[0],
         tt[-1],
         tt.map{|c| c[0]}.join,
         tt.map{|c| c[-1]}.join,
     ]
-    tile_edges[key].concat tile_edges[key].map(&:reverse)
+    edges.concat edges.map(&:reverse)
+    tiles << Tile.new(key, edges, tt)
 end
 
-c = tile_edges.to_a.map do |tile_entry|
+c = tiles.map do |tile_entry|
     [
-        tile_entry[0],
-        tile_entry[1][0..3].map{|edge| tile_edges.flat_map{|c| c[1]}.count{|c| c == edge}}.select{|c| c == 1}.length
+        tile_entry.id,
+        tile_entry.edges[0..3].map{|edge| tiles.flat_map{|c| c.edges}.count{|c| c == edge}}.select{|c| c == 1}.length
     ]
 end.select{|c| c[1] == 2}
-
 
 p c.map{|b|b[0]}.reduce(&:*)
