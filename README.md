@@ -1,5 +1,3 @@
-# Advent of Code 2020
+# Project has moved
 
-This is my attempt at code golfing advent of code 2020 in Ruby. Each solution will be minimal and will read in a data.txt within the same directory (Not included)
-
-Each example prints out the answers for that day's challenge.
+This project has been bundled into a central [Advent of Code](https://github.com/benMcH/advent-of-code) repo. 
